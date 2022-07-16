@@ -4,6 +4,7 @@ import me.nopalfi.springboot.repositories.StudentRepository;
 import me.nopalfi.springboot.exceptions.ResourceNotFoundException;
 import me.nopalfi.springboot.models.Student;
 import me.nopalfi.springboot.services.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +12,8 @@ import java.util.List;
 @Service
 public class StudentServiceImpl implements StudentService {
 
+    @Autowired
     private StudentRepository studentRepository;
-
-    public StudentServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
 
     @Override
     public List<Student> getAll() {
@@ -33,7 +31,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student upadte(Long id, Student student) {
+    public Student update(Long id, Student student) {
         Student update = studentRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Student", "id", id)
         );

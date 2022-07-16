@@ -2,6 +2,7 @@ package me.nopalfi.springboot.controllers;
 
 import me.nopalfi.springboot.models.Student;
 import me.nopalfi.springboot.services.StudentService;
+import me.nopalfi.springboot.services.impl.StudentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,14 @@ import java.util.List;
 @Controller
 @RequestMapping("api/v1/student")
 public class StudentController {
-    private StudentService studentService;
+
 
     @Autowired
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
+    private StudentServiceImpl studentService;
 
     @GetMapping("/")
-    public List<Student> getAllStudent() {
-        return studentService.getAll();
+    public ResponseEntity<List> getAllStudent() {
+        return new ResponseEntity<List>(studentService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -37,10 +36,10 @@ public class StudentController {
 
     @PutMapping("{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable("id") Long id, @RequestBody Student student) {
-        return new ResponseEntity<Student>(studentService.upadte(id, student), HttpStatus.ACCEPTED);
+        return new ResponseEntity<Student>(studentService.update(id, student), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping({"id"})
+    @DeleteMapping("{id}")
     public ResponseEntity<String> deleteStudent(@PathVariable("id") Long id) {
         studentService.delete(id);
         return new ResponseEntity<String>("Student deleted successfully",HttpStatus.ACCEPTED);
